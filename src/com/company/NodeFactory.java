@@ -14,16 +14,17 @@ public class NodeFactory {
 
         Node node;
 
+        if(formula.charAt(0) != '(') {
+            String initialSelectionOperation = help.checkSelectionOperation(formula.substring(0, min(4, formula.length())));
 
-        String initialSelectionOperation = help.checkSelectionOperation(formula.substring(0,min(4,formula.length())));
-        //In charge of the control of "selection operations"
-        if(initialSelectionOperation != "" && Objects.equals(formula.substring(formula.length()-1), ")")){
+            //In charge of the control of "selection operations"
+            if (initialSelectionOperation != "" && Objects.equals(formula.substring(formula.length() - 1), ")")) {
 
-            node = new Node(initialSelectionOperation);
-            node.children.addAll(this.Selection(formula.substring(initialSelectionOperation.length()+1, formula.length() -1 )));
-            return node;
+                node = new Node(initialSelectionOperation);
+                node.children.addAll(this.Selection(formula.substring(initialSelectionOperation.length() + 1, formula.length() - 1)));
+                return node;
+            }
         }
-
 
         // check parenthesis to create sub tree recursively and substitute its presence in formula by hashtag
         // if parenthesis is preceeded by
@@ -138,10 +139,13 @@ public class NodeFactory {
         ArrayList<Node> finalSelection = new ArrayList<Node>();
         ArrayList<String> elements =  help.ParseSelectionContent(selection);
         for(String element : elements){
-            if(element.contains(":"))
+
+            boolean b = element.charAt(0) != '(' && element.substring(element.length() - 1) != ")";
+            boolean operation = help.checkSelectionOperation(element.substring(0, min(4, element.length()))) == "";
+            if(element.contains(":") && operation && b)
                 finalSelection.addAll(Range(element));
             else
-            finalSelection.add(buildNode(element, null));
+                finalSelection.add(buildNode(element, null));
         }
         return finalSelection;
     }
