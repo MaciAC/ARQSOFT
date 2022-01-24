@@ -37,7 +37,7 @@ public class Calculator {
         else {
             address_passed.add(address);
             c.tree.root = computeNode(c.tree.root);
-            if(c.value == null){
+            if(c.tree.root.value == null){
                 c.tree.root = new Node("0.0");
                 c.tree.root.value = 0.0;
             }
